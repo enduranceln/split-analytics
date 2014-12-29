@@ -1,8 +1,11 @@
-require "split/helper"
-
 module Split
   module Analytics
-    module ClassicAnalytics
+    class ClassicAnalytics
+      attr_reader :split_data
+
+      def initialize(split_data)
+        @split_data = split_data
+      end
 
       def tracking_code(options={})
         # needs more options: http://code.google.com/apis/analytics/docs/gaJS/gaJSApi.html
@@ -28,14 +31,13 @@ module Split
           })();
         </script>
         EOF
-
-        defined?(raw) ? raw(code) : code
+        code
       end
 
       def custom_variables
-        return nil if ab_user.empty?
+        return nil unless split_data.keys.any?
         arr = []
-        ab_user.each_with_index do |h,i|
+        split_data.each_with_index do |h,i|
           arr << "_gaq.push(['_setCustomVar', #{i+1}, '#{h[0]}', '#{h[1]}', 1]);"
         end
         arr.reverse[0..4].reverse.join("\n")

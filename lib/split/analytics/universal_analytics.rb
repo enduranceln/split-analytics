@@ -1,10 +1,14 @@
-require "split/helper"
-
 module Split
   module Analytics
-    module UniversalAnalytics
+    class UniversalAnalytics
+      attr_reader :split_data
 
-      def universal_tracking_code(account, options={})
+      def initialize(split_data)
+        @split_data = split_data
+      end
+
+      def universal_tracking_code(options={})
+        account = options.delete(:account)
         disabled = options.delete(:disabled)
         js_options = {}
         options.each{|key, value| js_options[key.to_s.split('_').collect(&:capitalize).join] = value}
@@ -23,12 +27,17 @@ module Split
         </script>
         <!-- End Google Analytics -->
         EOF
-
-        defined?(raw) ? raw(code) : code
+        code
       end
 
       def universal_custom_variables
-        ab_user.to_json
+        return {} unless split_data.keys.any?
+        arr = {}
+        split_data.keys.each do |key|
+          dimension_index = key.gsub(/[^\d]/, '')
+          arr["dimension#{ dimension_index }"] = split_data[key]
+        end
+        arr.to_json
       end
     end
   end

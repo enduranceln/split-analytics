@@ -12,7 +12,10 @@ Dir['./lib/split/*.rb'].each { |f| require f }
 
 RSpec.configure do |config|
   config.order = 'random'
-  Split.configuration.persistence = Hash
+  Split.configuration = Split::Configuration.new
+  config.before(:each) do
+    @ab_user = {}
+  end
 end
 
 def session

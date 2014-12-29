@@ -29,9 +29,9 @@ class Result
       empty.sub("ga('send', 'pageview', {});", '')
     end
 
-    def with_variables
+    def with_variables(variable)
       e = empty.sub('{}', '{"CookieDomain":"example.com","CookiePath":"/cookies"}')
-      e.sub('{}', '{"link_color":"blue","link_color:finished":true}')
+      e.sub('{}', "{\"dimension1\":\"#{variable}\"}")
     end
   end
 end
