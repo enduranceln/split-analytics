@@ -20,4 +20,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rspec', ["~> 3.1.0"])
   gem.add_development_dependency('rake', ">= 10.4.2")
   gem.add_development_dependency('pry', ["~> 0.10.1"])
+  gem.add_development_dependency('fakeredis')
 end

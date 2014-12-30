@@ -7,6 +7,8 @@ require 'split/helper'
 require 'ostruct'
 require 'pry'
 require 'support/result'
+require 'fakeredis/rspec'
+
 
 Dir['./lib/split/*.rb'].each { |f| require f }
 
