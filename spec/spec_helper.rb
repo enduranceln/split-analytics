@@ -15,6 +15,22 @@ Dir['./lib/split/*.rb'].each { |f| require f }
 RSpec.configure do |config|
   config.order = 'random'
   Split.configuration = Split::Configuration.new
+  Split.configuration.allow_multiple_experiments = true
+  Split.configuration.experiments = {
+    'link_color' => {
+      dimension: "dimension1",
+      alternatives: [
+        { name: 'red', percent: 60 },
+        { name: 'blue', percent: 40 }
+      ],
+      goals: ['submitted', 'refund']
+    },
+     'link_text' => {
+       dimension: "dimension2",
+       alternatives: [ { name: 'Join' }, { name: 'Signup' }],
+       goals: ['refund']
+    }
+  }
   config.before(:each) do
     @ab_user = {}
   end
