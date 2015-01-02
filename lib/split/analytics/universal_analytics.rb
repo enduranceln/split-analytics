@@ -34,8 +34,8 @@ module Split
         return {} unless split_data.keys.any?
         arr = {}
         split_data.keys.each do |key|
-          experiment = Split::Experiment.find(key.gsub(/:\d/, ''))
-          arr[experiment.dimension] = split_data[key]
+          dimension = Split::Dimension.find(key.gsub(/:\d/, ''))
+          arr[dimension] = split_data[key]
         end
         arr.to_json
       end

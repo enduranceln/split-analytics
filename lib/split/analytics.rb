@@ -1,3 +1,4 @@
+require "split/dimension"
 %w[classic universal].each do |f|
   require "split/analytics/#{f}_analytics"
 end
