@@ -23,7 +23,8 @@ module Split
 
           ga('create', '#{account}', #{js_options.to_json});
           ga('require', 'displayfeatures');
-          #{"ga('send', 'pageview', #{universal_custom_variables});" unless disabled }
+          #{"ga('set', #{universal_custom_variables});" if split_data.keys.any?}
+          #{"ga('send', 'pageview');" unless disabled }
         </script>
         <!-- End Google Analytics -->
         EOF
@@ -31,7 +32,6 @@ module Split
       end
 
       def universal_custom_variables
-        return {} unless split_data.keys.any?
         arr = {}
         split_data.keys.each do |key|
           dimension = Split::Dimension.find(key.gsub(/:\d/, ''))
