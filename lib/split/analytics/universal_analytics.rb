@@ -32,11 +32,11 @@ module Split
       end
 
       def experiment_id
-        Split::GAExperiment.find_id(split_data.first[0].gsub(/:\d/, ''))
+        Split::GAExperiment.find_id(split_data.keys.first.gsub(/:\d/, ''))
       end
 
       def experiment_variation
-        split_data.first[1]
+        split_data[split_data.keys.first]
       end
 
     end
