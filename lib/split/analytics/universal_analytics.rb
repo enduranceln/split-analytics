@@ -22,7 +22,8 @@ module Split
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
           ga('require', 'displayfeatures');
-          #{"ga('set', #{universal_custom_variables});" if split_data.keys.any?}
+          #{"ga('set', 'expId', '#{experiment_id}');
+          ga('set', 'expVar', '#{experiment_variation}');" if split_data.keys.any? }
           #{"ga('send', 'pageview');" unless disabled }
         </script>
         <!-- End Google Analytics -->
@@ -30,14 +31,14 @@ module Split
         code
       end
 
-      def universal_custom_variables
-        arr = {}
-        split_data.keys.each do |key|
-          dimension = Split::Dimension.find(key.gsub(/:\d/, ''))
-          arr[dimension] = split_data[key]
-        end
-        arr.to_json.gsub("\"","\'")
+      def experiment_id
+        Split::GAExperiment.find_id(split_data.first[0].gsub(/:\d/, ''))
       end
+
+      def experiment_variation
+        split_data.first[1]
+      end
+
     end
   end
 end

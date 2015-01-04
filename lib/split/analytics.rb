@@ -1,4 +1,4 @@
-require "split/dimension"
+require "split/ga_experiment"
 %w[classic universal].each do |f|
   require "split/analytics/#{f}_analytics"
 end

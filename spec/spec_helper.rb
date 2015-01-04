@@ -19,6 +19,7 @@ RSpec.configure do |config|
   Split.configuration.experiments = {
     'link_color' => {
       dimension: "dimension1",
+      ga_exp_id: "something",
       alternatives: [
         { name: 'red', percent: 60 },
         { name: 'blue', percent: 40 }
@@ -26,7 +27,7 @@ RSpec.configure do |config|
       goals: ['submitted', 'refund']
     },
      'link_text' => {
-       dimension: "dimension2",
+       ga_exp_id: "something2",
        alternatives: [ { name: 'Join' }, { name: 'Signup' }],
        goals: ['refund']
     }

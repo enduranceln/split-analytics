@@ -10,7 +10,7 @@ class Result
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           ga('create', 'UA-12345-6', {});
           ga('require', 'displayfeatures');
-          ga('set', {});
+          nothing
           ga('send', 'pageview');
         </script>
         <!-- End Google Analytics -->
@@ -18,7 +18,7 @@ class Result
     end
 
     def without_split_keys
-      empty.sub("ga('set', {});", '')
+      empty.sub("nothing", '')
     end
 
     def with_cookies
@@ -35,7 +35,7 @@ class Result
 
     def with_variables(variable1, variable2)
       e = empty.sub('{}', "{'CookieDomain':'example.com','CookiePath':'/cookies'}")
-      e.sub('{}', "{'dimension1':'#{variable1}','dimension2':'#{variable2}'}")
+      e.sub("nothing", "ga('set', 'expId', 'something');\n          ga('set', 'expVar', '#{variable1}');")
     end
   end
 end
