@@ -22,11 +22,11 @@ class Result
     end
 
     def with_cookies
-      without_split_keys.sub('{}', '{"CookieDomain":"example.com"}')
+      without_split_keys.sub('{}', "{'CookieDomain':'example.com'}")
     end
 
     def with_path_to_cookies
-       without_split_keys.sub('{}', '{"CookieDomain":"example.com","CookiePath":"/cookies"}')
+       without_split_keys.sub('{}', "{'CookieDomain':'example.com','CookiePath':'/cookies'}")
     end
 
     def disabled
@@ -34,8 +34,8 @@ class Result
     end
 
     def with_variables(variable1, variable2)
-      e = empty.sub('{}', '{"CookieDomain":"example.com","CookiePath":"/cookies"}')
-      e.sub('{}', "{\"dimension1\":\"#{variable1}\",\"dimension2\":\"#{variable2}\"}")
+      e = empty.sub('{}', "{'CookieDomain':'example.com','CookiePath':'/cookies'}")
+      e.sub('{}', "{'dimension1':'#{variable1}','dimension2':'#{variable2}'}")
     end
   end
 end

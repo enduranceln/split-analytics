@@ -20,8 +20,7 @@ module Split
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-          ga('create', '#{account}', #{js_options.to_json});
+          ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
           ga('require', 'displayfeatures');
           #{"ga('set', #{universal_custom_variables});" if split_data.keys.any?}
           #{"ga('send', 'pageview');" unless disabled }
@@ -37,7 +36,7 @@ module Split
           dimension = Split::Dimension.find(key.gsub(/:\d/, ''))
           arr[dimension] = split_data[key]
         end
-        arr.to_json
+        arr.to_json.gsub("\"","\'")
       end
     end
   end
