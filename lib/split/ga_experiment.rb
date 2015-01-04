@@ -1,8 +1,19 @@
 module Split
   class GAExperiment
+    attr_accessor :experiment, :variation_name
 
-    def self.find_id(experiment)
-      Split.configuration.experiments[experiment][:ga_exp_id]
+    def initialize(key, variation_name)
+      @experiment = Split.configuration.experiments[key.split(":").first]
+      @variation_name = variation_name
+    end
+
+    def id
+      return unless experiment
+      experiment[:ga_exp_id]
+    end
+
+    def variation
+      experiment[:alternatives].find{|x| x[:name] == variation_name}[:ga_version]
     end
   end
 end

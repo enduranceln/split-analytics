@@ -6,7 +6,7 @@ describe Split::Analytics::UniversalAnalytics  do
   context "without variables" do
     it "should generate valid analytics javascript" do
       tracking_code = universal_tracking_code(account: 'UA-12345-6')
-      expect(tracking_code).to eql(Result.without_split_keys)
+      expect(tracking_code).to eql(Result.empty)
     end
 
     it "should generate valid js with cookie domain" do

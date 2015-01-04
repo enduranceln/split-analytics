@@ -19,7 +19,6 @@ module Split
     def raw_code(code)
       defined?(raw) ? raw(code) : code
     end
-
   end
 end
 
