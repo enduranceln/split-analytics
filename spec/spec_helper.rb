@@ -21,14 +21,14 @@ RSpec.configure do |config|
       dimension: "dimension1",
       ga_exp_id: "something",
       alternatives: [
-        { name: 'red', percent: 60 },
-        { name: 'blue', percent: 40 }
+        { name: 'red', percent: 60, ga_version: 2 },
+        { name: 'blue', percent: 40, ga_version: 1 }
       ],
       goals: ['submitted', 'refund']
     },
      'link_text' => {
        ga_exp_id: "something2",
-       alternatives: [ { name: 'Join' }, { name: 'Signup' }],
+       alternatives: [ { name: 'Join', ga_version: 1 }, { name: 'Signup', ga_version: 2 }],
        goals: ['refund']
     }
   }

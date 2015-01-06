@@ -31,7 +31,7 @@ describe Split::Analytics::UniversalAnalytics  do
       variable2 = ab_test('link_text', 'Join', 'Signup')
 
       tracking_code = universal_tracking_code(account: 'UA-12345-6', cookie_domain: "example.com", cookie_path: "/cookies")
-      expect(tracking_code).to eql(Result.with_variables(variable1, variable2))
+      expect(tracking_code).to eql(Result.with_variables('1', '2'))
     end
   end
 end

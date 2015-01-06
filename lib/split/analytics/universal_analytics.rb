@@ -22,7 +22,7 @@ module Split
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
           ga('require', 'displayfeatures');
-          #{"ga('set', 'expId', '#{experiment_id}');
+          #{"ga('set', 'expId', '#{experiment.id}');
           ga('set', 'expVar', '#{experiment_variation}');" if split_data.keys.any? }
           #{"ga('send', 'pageview');" unless disabled }
         </script>
@@ -31,12 +31,13 @@ module Split
         code
       end
 
-      def experiment_id
-        Split::GAExperiment.find_id(split_data.keys.first.gsub(/:\d/, ''))
+      def experiment
+        Split::GAExperiment.new(split_data.keys.first)
       end
 
+
       def experiment_variation
-        split_data[split_data.keys.first]
+        experiment.variation(split_data[split_data.keys.first])
       end
 
     end
