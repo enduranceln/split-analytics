@@ -3,6 +3,7 @@ module Split
     attr_accessor :experiment
 
     def initialize(name)
+      name = name.split(":").first
       @experiment = Split.configuration.experiments[name]
     end
 
@@ -11,6 +12,7 @@ module Split
     end
 
     def variation(name)
+      name = name.split(":").first
       experiment[:alternatives].find{|x| x[:name] == name}[:ga_version]
     end
   end
