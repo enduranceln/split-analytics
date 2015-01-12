@@ -23,12 +23,16 @@ module Split
           ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
           ga('require', 'displayfeatures');
           #{"ga('set', 'expId', '#{experiment.id}');
-          ga('set', 'expVar', '#{experiment_variation}');" if split_data.keys.any? }
+          ga('set', 'expVar', '#{experiment_variation}');" if experiment_happening? }
           #{"ga('send', 'pageview');" unless disabled }
         </script>
         <!-- End Google Analytics -->
         EOF
         code
+      end
+
+      def experiment_happening?
+        split_data.keys.first and !split_data.keys.first.include?(":")
       end
 
       def experiment
