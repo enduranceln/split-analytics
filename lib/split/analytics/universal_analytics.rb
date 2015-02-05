@@ -50,7 +50,7 @@ module Split
       end
 
       def experiments
-        split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}
+        split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| v.id.present? && v.variation.present?}
       end
     end
   end

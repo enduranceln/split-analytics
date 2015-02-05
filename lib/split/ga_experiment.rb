@@ -3,6 +3,7 @@ module Split
     attr_accessor :experiment, :variation_name
 
     def initialize(key, variation_name)
+      return if key.include?(":finished")
       @experiment = Split.configuration.experiments[key.split(":").first]
       @variation_name = variation_name
     end
@@ -13,6 +14,7 @@ module Split
     end
 
     def variation
+      return unless experiment
       experiment[:alternatives].find{|x| x[:name] == variation_name}[:ga_version]
     end
   end
