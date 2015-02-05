@@ -32,6 +32,12 @@ describe Split::Analytics::UniversalAnalytics  do
 
       tracking_code = universal_tracking_code(account: 'UA-12345-6', cookie_domain: "example.com", cookie_path: "/cookies")
       expect(tracking_code).to eql(Result.with_variables(variable1, variable2))
+
+      finished('link_color')
+      finished('link_text')
+
+      tracking_code = universal_tracking_code(account: 'UA-12345-6', cookie_domain: "example.com", cookie_path: "/cookies")
+      expect(tracking_code).to eql(Result.with_path_to_cookies)
     end
   end
 end
