@@ -1,8 +1,7 @@
 class Result
   class << self
     def empty
-      <<-EOF
-          <!-- Google Analytics -->
+          "<!-- Google Analytics -->
           <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -12,23 +11,23 @@ class Result
             ga('require', 'displayfeatures');
             ga('send', 'pageview');
           </script>
-          <!-- End Google Analytics -->
-      EOF
+          <!-- End Google Analytics -->"
     end
 
     def experiments(variable1, variable2)
      a = Split::GAExperiment.new('link_color', variable1)
      b = Split::GAExperiment.new('link_text', variable2)
-     code = <<-EOF
-            <!-- Google Analytics Experiments -->
-            <script src="//www.google-analytics.com/cx/api.js"></script>
+     code = "<!-- Google Analytics Experiments -->
+            <script src='//www.google-analytics.com/cx/api.js'></script>
             <script>
               cxApi.setCookiePath('/cookies');
               cxApi.setDomainName('example.com');
-              cxApi.setChosenVariation(#{a.variation}, '#{a.id}');\ncxApi.setChosenVariation(#{b.variation}, '#{b.id}');
+              cxApi.setChosenVariation(#{a.variation}, '#{a.id}');
+              ga('send', 'event', 'experiment', 'view');
+              cxApi.setChosenVariation(#{b.variation}, '#{b.id}');
+              ga('send', 'event', 'experiment', 'view');
             </script>
-            </!-- Google Analytics Experiments -->
-      EOF
+            <!-- Google Analytics Experiments -->"
     end
 
     def with_cookies
@@ -44,7 +43,7 @@ class Result
     end
 
     def with_variables(variable1, variable2)
-      experiments(variable1, variable2) + with_path_to_cookies
+      with_path_to_cookies + "\n" + experiments(variable1, variable2)
     end
   end
 end

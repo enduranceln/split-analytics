@@ -10,12 +10,12 @@ module Split
 
     def id
       return unless experiment
-      experiment[:ga_exp_id]
+      @id ||= experiment[:ga_exp_id]
     end
 
     def variation
       return unless experiment
-      experiment[:alternatives].find{|x| x[:name] == variation_name}[:ga_version]
+      @variation ||= experiment[:alternatives].find{|x| x[:name] == variation_name}[:ga_version]
     end
   end
 end

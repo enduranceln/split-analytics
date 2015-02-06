@@ -11,25 +11,9 @@ module Split
         account = options.delete(:account)
         disabled = options.delete(:disabled)
         js_options = {}
-        code = ''
         options.each{|key, value| js_options[key.to_s.split('_').collect(&:capitalize).join] = value}
 
-        if experiment_happening?
-          code << <<-EOF
-            <!-- Google Analytics Experiments -->
-            <script src="//www.google-analytics.com/cx/api.js"></script>
-            <script>
-              cxApi.setCookiePath('#{js_options['CookiePath']}');
-              cxApi.setDomainName('#{js_options['CookieDomain']}');
-              #{ experiments.collect{|experiment|
-                "cxApi.setChosenVariation(#{experiment.variation}, '#{experiment.id}');"
-              }.join("\n") }
-            </script>
-            </!-- Google Analytics Experiments -->
-          EOF
-        end
-
-        code << <<-EOF
+        code = "
           <!-- Google Analytics -->
           <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -40,9 +24,23 @@ module Split
             ga('require', 'displayfeatures');
             #{"ga('send', 'pageview');" unless disabled }
           </script>
-          <!-- End Google Analytics -->
-        EOF
-        code
+          <!-- End Google Analytics -->"
+
+        if experiment_happening?
+          code << "
+            <!-- Google Analytics Experiments -->
+            <script src='//www.google-analytics.com/cx/api.js'></script>
+            <script>
+              cxApi.setCookiePath('#{js_options['CookiePath']}');
+              cxApi.setDomainName('#{js_options['CookieDomain']}');
+              #{ experiments.collect{|experiment|
+                "cxApi.setChosenVariation(#{experiment.variation}, '#{experiment.id}');
+                 ga('send', 'event', 'experiment', 'view');"
+              }.join() }
+            </script>
+            <!-- Google Analytics Experiments -->"
+        end
+        code.gsub(/\s+/, "")
       end
 
       def experiment_happening?
@@ -50,7 +48,7 @@ module Split
       end
 
       def experiments
-        split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| v.id.present? && v.variation.present?}
+        split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| !v.id.nil? && !v.variation.nil?}
       end
     end
   end
