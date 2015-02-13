@@ -11,11 +11,9 @@ module Split
         account = options.delete(:account)
         disabled = options.delete(:disabled)
         js_options = {}
-        options.each{|key, value| js_options[key.to_s.split('_').collect(&:capitalize).join] = value}
+        options.each{|key, value| js_options[key.to_s.gsub(/_([a-z])/){|x| x[1].upcase}] = value}
 
-        code = "
-          <!-- Google Analytics -->
-          <script>
+        code = "<script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -23,24 +21,19 @@ module Split
             ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
             ga('require', 'displayfeatures');
             #{"ga('send', 'pageview');" unless disabled }
-          </script>
-          <!-- End Google Analytics -->"
-
+          </script>"
         if experiment_happening?
-          code << "
-            <!-- Google Analytics Experiments -->
-            <script src='//www.google-analytics.com/cx/api.js'></script>
+          code << "<script src='//www.google-analytics.com/cx/api.js'></script>
             <script>
-              cxApi.setCookiePath('#{js_options['CookiePath']}');
-              cxApi.setDomainName('#{js_options['CookieDomain']}');
-              #{ experiments.collect{|experiment|
+              cxApi.setCookiePath('#{js_options['cookiePath']}');
+              cxApi.setDomainName('#{js_options['cookieDomain']}');
+              #{ experiments.collect do |experiment|
                 "cxApi.setChosenVariation(#{experiment.variation}, '#{experiment.id}');
-                 ga('send', 'event', 'experiment', 'view');"
-              }.join() }
-            </script>
-            <!-- Google Analytics Experiments -->"
+                ga('send', 'event', 'experiment', 'view');"
+              end.join( ) }
+            </script>"
         end
-        code.gsub(/\s+/, "")
+        code
       end
 
       def experiment_happening?
