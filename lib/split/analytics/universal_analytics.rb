@@ -22,15 +22,21 @@ module Split
             ga('require', 'displayfeatures');
             #{"ga('send', 'pageview');" unless disabled }
           </script>"
-        if experiment_happening?
+
+        if !disabled && experiment_happening?
           code << "<script src='//www.google-analytics.com/cx/api.js'></script>
             <script>
               cxApi.setCookiePath('#{js_options['cookiePath']}');
               cxApi.setDomainName('#{js_options['cookieDomain']}');
-              #{ experiments.collect do |experiment|
-                "cxApi.setChosenVariation(#{experiment.variation}, '#{experiment.id}');
-                ga('send', 'event', 'experiment', 'view');"
-              end.join( ) }
+              var sendExperimentData = function(tracker, experimentVar, experimentId) {
+                cxApi.setChosenVariation(experimentVar, experimentId);
+                tracker.send('event', 'experiment', 'view', experimentId, experimentVar, {'nonInteraction': 1});
+              }
+              ga(function(tracker) {
+                #{ experiments.collect do |experiment|
+                  "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}');\n"
+                end.join() }
+              });
             </script>"
         end
         code
