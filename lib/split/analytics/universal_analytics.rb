@@ -28,13 +28,13 @@ module Split
             <script>
               cxApi.setCookiePath('#{js_options['cookiePath']}');
               cxApi.setDomainName('#{js_options['cookieDomain']}');
-              var sendExperimentData = function(tracker, experimentVar, experimentId) {
+              var sendExperimentData = function(tracker, experimentVar, experimentId, experimentName) {
                 cxApi.setChosenVariation(experimentVar, experimentId);
-                tracker.send('event', 'experiment', 'view', experimentId + ':' + experimentVar, {'nonInteraction': 1});
+                tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
               }
               ga(function(tracker) {
                 #{ experiments.collect do |experiment|
-                  "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}');\n"
+                  "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}', '#{experiment.name}');\n"
                 end.join() }
               });
             </script>"

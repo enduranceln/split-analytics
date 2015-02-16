@@ -19,13 +19,13 @@ class Result
       <script>
         cxApi.setCookiePath('/cookies');
         cxApi.setDomainName('example.com');
-        var sendExperimentData = function(tracker, experimentVar, experimentId) {
+        var sendExperimentData = function(tracker, experimentVar, experimentId, experimentName) {
            cxApi.setChosenVariation(experimentVar, experimentId);
-           tracker.send('event', 'experiment', 'view', experimentId + ':' + experimentVar, {'nonInteraction': 1});
+           tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
         }
         ga(function(tracker) {
-          sendExperimentData(tracker, #{a.variation}, '#{a.id}');
-          sendExperimentData(tracker, #{b.variation}, '#{b.id}');
+          sendExperimentData(tracker, #{a.variation}, '#{a.id}', '#{a.name}');
+          sendExperimentData(tracker, #{b.variation}, '#{b.id}', '#{b.name}');
         });
       </script>"
     end
