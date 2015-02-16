@@ -30,7 +30,7 @@ module Split
               cxApi.setDomainName('#{js_options['cookieDomain']}');
               var sendExperimentData = function(tracker, experimentVar, experimentId) {
                 cxApi.setChosenVariation(experimentVar, experimentId);
-                tracker.send('event', 'experiment', 'view', experimentId, experimentVar, {'nonInteraction': 1});
+                tracker.send('event', 'experiment', 'view', experimentId + ':' + experimentVar, {'nonInteraction': 1});
               }
               ga(function(tracker) {
                 #{ experiments.collect do |experiment|
