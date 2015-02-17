@@ -20,6 +20,10 @@ module Split
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
             ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
             ga('require', 'displayfeatures');
+            #{ dimentions.collect do |dimention|
+              "ga('set', '#{dimention.id}', '#{dimention.variation_name}');"
+            end.join() }
+
             #{"ga('send', 'pageview');" unless disabled }
           </script>"
 
@@ -48,6 +52,10 @@ module Split
 
       def experiments
         split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| !v.id.nil? && !v.variation.nil?}
+      end
+
+      def dimentions
+        split_data.keys.collect{|key| Split::GADimension.new(key, split_data[key])}.select{|v| !v.id.nil? }
       end
     end
   end

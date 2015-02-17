@@ -12,6 +12,22 @@ class Result
       </script>"
     end
 
+    def dimensions(variable1, variable2)
+     a = Split::GADimension.new('link_color', variable1)
+     b = Split::GADimension.new('link_text', variable2)
+      "<script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-12345-6', {'cookieDomain':'example.com','cookiePath':'/cookies'});
+        ga('require', 'displayfeatures');
+        ga('set','#{a.id}','#{a.variation_name}');
+        ga('set','#{b.id}','#{b.variation_name}');
+        ga('send', 'pageview');
+      </script>"
+    end
+
     def experiments(variable1, variable2)
      a = Split::GAExperiment.new('link_color', variable1)
      b = Split::GAExperiment.new('link_text', variable2)
@@ -42,8 +58,10 @@ class Result
       empty.sub("ga('send', 'pageview');", '')
     end
 
+
     def with_variables(variable1, variable2)
-      with_path_to_cookies + "\n" + experiments(variable1, variable2)
+      dimensions(variable1, variable2) + "\n" + experiments(variable1, variable2)
     end
+
   end
 end
