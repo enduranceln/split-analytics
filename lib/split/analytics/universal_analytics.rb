@@ -23,7 +23,6 @@ module Split
             #{ dimentions.collect do |dimention|
               "ga('set', '#{dimention.id}', '#{dimention.variation_name}');"
             end.join() }
-
             #{"ga('send', 'pageview');" unless disabled }
           </script>"
 
@@ -37,6 +36,9 @@ module Split
                 tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
               }
               ga(function(tracker) {
+               #{ dimentions.collect do |dimention|
+                  "ga('set', '#{dimention.id}', '');"
+                end.join() }
                 #{ experiments.collect do |experiment|
                   "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}', '#{experiment.name}');\n"
                 end.join() }
