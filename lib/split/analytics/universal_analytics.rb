@@ -20,8 +20,8 @@ module Split
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
             ga('create', '#{account}', #{js_options.to_json.gsub("\"","\'")});
             ga('require', 'displayfeatures');
-            #{ dimentions.collect do |dimention|
-              "ga('set', '#{dimention.id}', '#{dimention.variation_name}');"
+            #{ dimensions.collect do |dimension|
+              "ga('set', '#{dimension.id}', '#{dimension.variation_name}');"
             end.join() }
             #{"ga('send', 'pageview');" unless disabled }
           </script>"
@@ -36,8 +36,8 @@ module Split
                 tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
               }
               ga(function(tracker) {
-               #{ dimentions.collect do |dimention|
-                  "ga('set', '#{dimention.id}', '');"
+               #{ dimensions.collect do |dimension|
+                  "ga('set', '#{dimension.id}', '');"
                 end.join() }
                 #{ experiments.collect do |experiment|
                   "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}', '#{experiment.name}');\n"
@@ -56,7 +56,7 @@ module Split
         split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| !v.id.nil? && !v.variation.nil?}
       end
 
-      def dimentions
+      def dimensions
         split_data.keys.collect{|key| Split::GADimension.new(key, split_data[key])}.select{|v| !v.id.nil? }
       end
     end
