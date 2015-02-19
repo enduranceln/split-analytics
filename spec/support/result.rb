@@ -41,7 +41,7 @@ class Result
         cxApi.setDomainName('example.com');
         var sendExperimentData = function(tracker, experimentVar, experimentId, experimentName) {
            cxApi.setChosenVariation(experimentVar, experimentId);
-           tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
+           tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1, 'page': fakeLocation});
         }
         ga(function(tracker) {
           sendExperimentData(tracker, #{e_a.variation}, '#{e_a.id}', '#{e_a.name}');
