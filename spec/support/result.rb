@@ -36,8 +36,6 @@ class Result
            tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
         }
         ga(function(tracker) {
-          ga('set','#{d_a.id}','');
-          ga('set','#{d_b.id}','');
           sendExperimentData(tracker, #{e_a.variation}, '#{e_a.id}', '#{e_a.name}');
           sendExperimentData(tracker, #{e_b.variation}, '#{e_b.id}', '#{e_b.name}');
         });

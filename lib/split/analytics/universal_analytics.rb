@@ -36,9 +36,6 @@ module Split
                 tracker.send('event', 'experiment', 'view', experimentName, {'nonInteraction': 1});
               }
               ga(function(tracker) {
-               #{ dimensions.collect do |dimension|
-                  "ga('set', '#{dimension.id}', '');"
-                end.join() }
                 #{ experiments.collect do |experiment|
                   "sendExperimentData(tracker, #{experiment.variation}, '#{experiment.id}', '#{experiment.name}');\n"
                 end.join() }
