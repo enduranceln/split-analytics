@@ -3,7 +3,6 @@ module Split
     attr_accessor :experiment, :variation_name, :name
 
     def initialize(key, variation_name)
-      return if key.include?(":finished")
       @experiment = Split.configuration.experiments[key.split(":").first]
       @variation_name = variation_name
       @name = key.split(":").first + ": " + variation_name

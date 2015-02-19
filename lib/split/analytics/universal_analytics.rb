@@ -23,7 +23,12 @@ module Split
             #{ dimensions.collect do |dimension|
               "ga('set', '#{dimension.id}', '#{dimension.variation_name}');"
             end.join() }
-            #{"ga('send', 'pageview');" unless disabled }
+            var fakeLocation = window.location.pathname + window.location.search;
+            #{ split_data_values.collect do |data|
+              "var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{data}=true';
+              fakeLocation += p;"
+            end.join() }
+            #{"ga('send', 'pageview', fakeLocation);" unless disabled }
           </script>"
 
         if !disabled && experiment_happening?
@@ -49,12 +54,20 @@ module Split
         split_data.keys.any? && experiments.any?
       end
 
+      def split_data_values
+        split_data_keys.collect{|key| split_data[key]}
+      end
+
       def experiments
-        split_data.keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| !v.id.nil? && !v.variation.nil?}
+        split_data_keys.collect{|key| Split::GAExperiment.new(key, split_data[key])}.select{|v| !v.id.nil? && !v.variation.nil?}
       end
 
       def dimensions
-        split_data.keys.collect{|key| Split::GADimension.new(key, split_data[key])}.select{|v| !v.id.nil? }
+        split_data_keys.collect{|key| Split::GADimension.new(key, split_data[key])}.select{|v| !v.id.nil? }
+      end
+
+      def split_data_keys
+        @split_data_keys ||= split_data.keys.select{|x| !x.include?(":finished")}
       end
     end
   end

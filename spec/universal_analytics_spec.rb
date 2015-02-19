@@ -29,10 +29,10 @@ describe Split::Analytics::UniversalAnalytics  do
     it "should add custom variables for every test the user is involved in" do
       variable1 = ab_test('link_color', 'red', 'blue')
       variable2 = ab_test('link_text', 'Join', 'Signup')
-      ab_test('kittens', 'Ninja', 'Wildberry')
+      variable3 = ab_test('kittens', 'Ninja', 'Wildberry')
 
       tracking_code = universal_tracking_code(account: 'UA-12345-6', cookie_domain: "example.com", cookie_path: "/cookies")
-      expect(tracking_code.gsub(/\s+/, "")).to eql(Result.with_variables(variable1, variable2).gsub(/\s+/, ""))
+      expect(tracking_code.gsub(/\s+/, "")).to eql(Result.with_variables(variable1, variable2, variable3).gsub(/\s+/, ""))
 
       finished('link_color')
       finished('link_text')

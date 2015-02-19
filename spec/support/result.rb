@@ -8,7 +8,8 @@ class Result
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-12345-6', {});
         ga('require', 'displayfeatures');
-        ga('send', 'pageview');
+        var fakeLocation = window.location.pathname + window.location.search;
+        ga('send', 'pageview', fakeLocation);
       </script>"
     end
 
@@ -22,7 +23,14 @@ class Result
         ga('require', 'displayfeatures');
         ga('set','#{d_a.id}','#{d_a.variation_name}');
         ga('set','#{d_b.id}','#{d_b.variation_name}');
-        ga('send', 'pageview');
+        var fakeLocation = window.location.pathname + window.location.search;
+        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable1}=true';
+        fakeLocation += p;
+        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable2}=true';
+        fakeLocation += p;
+        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable3}=true';
+        fakeLocation += p;
+        ga('send', 'pageview', fakeLocation);
       </script>"
     end
 
@@ -51,13 +59,14 @@ class Result
     end
 
     def disabled
-      empty.sub("ga('send', 'pageview');", '')
+      empty.sub("ga('send', 'pageview', fakeLocation);", '')
     end
 
 
-    def with_variables(variable1, variable2)
+    def with_variables(variable1, variable2, variable3)
       @variable1 = variable1
       @variable2 = variable2
+      @variable3 = variable3
       dimensions + "\n" + experiments
     end
 
