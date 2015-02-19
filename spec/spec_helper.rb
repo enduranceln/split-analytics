@@ -26,11 +26,15 @@ RSpec.configure do |config|
       ],
       goals: ['submitted', 'refund']
     },
-     'link_text' => {
-       ga_exp_id: "something2",
-       ga_dimension: "dimension2",
-       alternatives: [ { name: 'Join', ga_version: 1 }, { name: 'Signup', ga_version: 2 }],
-       goals: ['refund']
+    'link_text' => {
+      ga_exp_id: "something2",
+      ga_dimension: "dimension2",
+      alternatives: [ { name: 'Join', ga_version: 1 }, { name: 'Signup', ga_version: 2 }],
+      goals: ['refund']
+    },
+    'kittens' => {
+      alternatives: [ { name: 'Ninja' }, { name: 'Wildberry' }],
+      goals: ['submitted', 'refund']
     }
   }
   config.before(:each) do
