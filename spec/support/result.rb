@@ -9,6 +9,10 @@ class Result
         ga('create', 'UA-12345-6', {});
         ga('require', 'displayfeatures');
         var fakeLocation = window.location.pathname + window.location.search;
+        var makeFakeLocation = function(data) {
+          var parts = fakeLocation.split('/');
+          return fakeLocation = parts.slice(0, parts.length-1).join('/') + encodeURIComponent(data) + '/' + parts[parts.length-1];
+        }
         ga('send', 'pageview', fakeLocation);
       </script>"
     end
@@ -24,12 +28,13 @@ class Result
         ga('set','#{d_a.id}','#{d_a.variation_name}');
         ga('set','#{d_b.id}','#{d_b.variation_name}');
         var fakeLocation = window.location.pathname + window.location.search;
-        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable1}=true';
-        fakeLocation += p;
-        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable2}=true';
-        fakeLocation += p;
-        var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{@variable3}=true';
-        fakeLocation += p;
+        var makeFakeLocation = function(data) {
+          var parts = fakeLocation.split('/');
+          return fakeLocation = parts.slice(0, parts.length-1).join('/') + encodeURIComponent(data) + '/' + parts[parts.length-1];
+        }
+        makeFakeLocation('#{@variable1}');
+        makeFakeLocation('#{@variable2}');
+        makeFakeLocation('#{@variable3}');
         ga('send', 'pageview', fakeLocation);
       </script>"
     end

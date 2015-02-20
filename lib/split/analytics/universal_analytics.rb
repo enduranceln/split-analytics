@@ -24,9 +24,12 @@ module Split
               "ga('set', '#{dimension.id}', '#{dimension.variation_name}');"
             end.join() }
             var fakeLocation = window.location.pathname + window.location.search;
+            var makeFakeLocation = function(data) {
+              var parts = fakeLocation.split('/');
+              return fakeLocation = parts.slice(0, parts.length-1).join('/') + encodeURIComponent(data) + '/' + parts[parts.length-1];
+            }
             #{ split_data_values.collect do |data|
-              "var p = (fakeLocation.indexOf('?') > 0 ? '&' : '?') + '#{data}=true';
-              fakeLocation += p;"
+             "makeFakeLocation('#{data}');"
             end.join() }
             #{"ga('send', 'pageview', fakeLocation);" unless disabled }
           </script>"
