@@ -8,6 +8,7 @@ module Split
       end
 
       def universal_tracking_code(options={})
+        additional_configuration = options.delete(:additional_configuration)
         account = options.delete(:account)
         disabled = options.delete(:disabled)
         js_options = {}
@@ -28,6 +29,7 @@ module Split
               var parts = fakeLocation.split('/');
               return fakeLocation = parts.slice(0, parts.length-1).join('/') + '/' + encodeURIComponent(data) + '/' + parts[parts.length-1];
             }
+            #{additional_configuration}
             #{ split_data_values.collect do |data|
              "makeFakeLocation('#{data}');"
             end.join() }
